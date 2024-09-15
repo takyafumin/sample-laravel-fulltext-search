@@ -1,0 +1,15 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch_data:/data
+      - ./.docker/meilisearch/meilisearch.config.json:/etc/meilisearch/meilisearch.config.json
+    # environment:
+      # Meilisearch の設定を環境変数で上書きすることもできます
+      # MEILI_HTTP_HOST: "0.0.0.0"
+      # MEILI_HTTP_PORT: "7700"
+      # MEILI_DATABASE_PATH: "/data/meilisearch.db"
+volumes:
+  meilisearch_data:
