@@ -2,9 +2,9 @@
 
 namespace Packages\User\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Packages\User\Application\UseCase\UserSearchUseCase;
+use Packages\User\Http\Requests\UserSearchRequest;
 
 /**
  * ユーザー検索 Controller
@@ -19,11 +19,11 @@ class UserSearchController extends Controller
     /**
      * ユーザー検索
      *
-     * @param Request $request
+     * @param UserSearchRequest $request
      * @return JsonResponse
      */
-    public function __invoke(Request $request) {
-        $users = $this->userSearchUseCase->execute();
+    public function __invoke(UserSearchRequest $request) {
+        $users = $this->userSearchUseCase->execute($request->keyword);
         return response()->json($users);
     }
 }

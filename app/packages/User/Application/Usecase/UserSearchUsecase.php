@@ -19,10 +19,11 @@ class UserSearchUsecase
     /**
      * ユーザー検索
      *
+     * @param string|null $keyword
      * @return LazyCollection<UserSearchDto>
      */
-    public function execute(): LazyCollection
+    public function execute(?string $keyword): LazyCollection
     {
-        return $this->userSearchQuery->search();
+        return $this->userSearchQuery->search($keyword);
     }
 }

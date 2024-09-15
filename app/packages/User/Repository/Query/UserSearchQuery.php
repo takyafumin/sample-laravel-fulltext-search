@@ -3,6 +3,7 @@
 namespace Packages\User\Repository\Query;
 
 use App\Models\User;
+use App\Repository\Query\Trait\WhereLike;
 use Illuminate\Support\LazyCollection;
 use Packages\User\Application\Dto\UserSearchDto;
 
@@ -11,15 +12,23 @@ use Packages\User\Application\Dto\UserSearchDto;
  */
 class UserSearchQuery
 {
+    use WhereLike;
+
     /**
      * ユーザー検索
      *
+     * @param string|null $keyword
      * @return LazyCollection<UserSearchDto>
      */
-    public function search(): LazyCollection
+    public function search(?string $keyword): LazyCollection
     {
-        return User::query()
-            ->cursor()
+        $query = User::query();
+
+        if (!is_null($keyword)) {
+            $query = $this->whereLikeWithEscape($query, 'name', $keyword);
+        }
+
+        return $query->cursor()
             ->map(function (User $user) {
             return new UserSearchDto($user);
         });
