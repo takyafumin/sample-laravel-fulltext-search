@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Scout\Searchable;
 
 /**
  * ユーザー
@@ -19,6 +20,7 @@ class User extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -52,5 +54,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * 全文検索用の配列を取得
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+       $array = $this->toArray();
+
+       unset($array['updated_at']);
+       unset($array['email_verified_at']);
+
+       return $array;
     }
 }
