@@ -18,6 +18,19 @@ composer install
 php artisan serve
 ```
 
+### database
+
+#### 初期セットアップ
+
+```bash
+# migration
+cd app
+php artisan migrate
+
+# seeder
+php -d memory_limit=512M artisan db:seed
+```
+
 ### meilisearch
 
 #### サーバ起動
@@ -46,19 +59,6 @@ curl \
   --data-binary '{ "enabled": false }'
 ```
 
-#### indexの削除
-
-```bash
-curl \
-  -X DELETE 'http://localhost:7700/indexes/users'
-```
-
-または
-
-```bash
-php artisan scout:flush "App\Models\User"
-```
-
 ## 使い方
 
 ### Databaseを用いた検索
@@ -71,4 +71,29 @@ http://localhost:8000/users/search?keyword=%E5%B1%B1%E7%94%B0
 
 ```bash
 http://localhost:8000/users/fuzzy-search?keyword=%E5%B1%B1%E7%94%B0
+```
+
+## TIPS
+
+### database
+
+#### 破棄
+
+```bash
+rm -rf app/app/database/database.sqlite
+```
+
+### meilisearch
+
+#### indexの削除
+
+```bash
+curl \
+  -X DELETE 'http://localhost:7700/indexes/users'
+```
+
+または
+
+```bash
+php artisan scout:flush "App\Models\User"
 ```
