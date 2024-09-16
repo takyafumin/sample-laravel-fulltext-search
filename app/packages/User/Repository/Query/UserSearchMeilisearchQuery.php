@@ -3,7 +3,6 @@
 namespace Packages\User\Repository\Query;
 
 use App\Models\User;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
 use Packages\User\Application\Dto\UserSearchDto;
 
@@ -27,11 +26,12 @@ class UserSearchMeilisearchQuery implements ISearchQuery
     {
         $users = User::search($keyword)
             ->take(self::LIMIT)
-            ->query(fn (Builder $query) => $query->cursor()); // ここでEloquentModelに対してfilterできる
+            ->cursor();
+            // ->query(fn (Builder $query) => $query->cursor()); // ここでEloquentModelに対してfilterできる
 
-        return $users->cursor()
+        return $users
             ->map(function (User $user) {
-            return new UserSearchDto($user);
-        });
+                return new UserSearchDto($user);
+            });
     }
 }

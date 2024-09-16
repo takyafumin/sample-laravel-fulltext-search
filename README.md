@@ -97,3 +97,8 @@ curl \
 ```bash
 php artisan scout:flush "App\Models\User"
 ```
+
+## その他
+
+`山田 太郎`のように検索するとfuzzy searchとなり意図しないものも検索にヒットする。
+`"山田" "太郎"`や`"山田 太郎"`のように指定することでヒットするデータを限定できそう。
