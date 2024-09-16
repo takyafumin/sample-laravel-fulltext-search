@@ -13,6 +13,11 @@ use Packages\User\Application\Dto\UserSearchDto;
 class UserSearchMeilisearchQuery implements ISearchQuery
 {
     /**
+     * 取得件数
+     */
+    private const LIMIT = 100;
+
+    /**
      * ユーザー検索
      *
      * @param string|null $keyword
@@ -21,6 +26,7 @@ class UserSearchMeilisearchQuery implements ISearchQuery
     public function search(?string $keyword): LazyCollection
     {
         $users = User::search($keyword)
+            ->take(self::LIMIT)
             ->query(fn (Builder $query) => $query->cursor()); // ここでEloquentModelに対してfilterできる
 
         return $users->cursor()
