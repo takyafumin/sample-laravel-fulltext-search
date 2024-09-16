@@ -8,9 +8,9 @@ use Packages\User\Application\UseCase\UserSearchUseCase;
 use Packages\User\Http\Requests\UserSearchRequest;
 
 /**
- * ユーザー検索 Controller
+ * ユーザー検索(あいまい検索) Controller
  */
-class UserSearchController extends Controller
+class UserFuzzySearchController extends Controller
 {
     public function __construct(
         private UserSearchUseCase $userSearchUseCase
@@ -18,13 +18,13 @@ class UserSearchController extends Controller
     }
 
     /**
-     * ユーザー検索
+     * ユーザー検索(あいまい検索)
      *
      * @param UserSearchRequest $request
      * @return JsonResponse
      */
     public function __invoke(UserSearchRequest $request) {
-        $users = $this->userSearchUseCase->execute(SearchType::DATABASE, $request->keyword);
+        $users = $this->userSearchUseCase->execute(SearchType::MEILISEARCH, $request->keyword);
         return response()->json($users);
     }
 }

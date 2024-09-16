@@ -3,17 +3,15 @@
 namespace Packages\User\Repository\Query;
 
 use App\Models\User;
-use App\Repository\Query\Trait\WhereLike;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\LazyCollection;
 use Packages\User\Application\Dto\UserSearchDto;
 
 /**
- * ユーザー検索クエリ
+ * ユーザー検索クエリ(meilisearch)
  */
-class UserSearchQuery
+class UserSearchMeilisearchQuery implements ISearchQuery
 {
-    use WhereLike;
-
     /**
      * ユーザー検索
      *
@@ -22,13 +20,10 @@ class UserSearchQuery
      */
     public function search(?string $keyword): LazyCollection
     {
-        $query = User::query();
+        $users = User::search($keyword)
+            ->query(fn (Builder $query) => $query->cursor()); // ここでEloquentModelに対してfilterできる
 
-        if (!is_null($keyword)) {
-            $query = $this->whereLikeWithEscape($query, 'name', $keyword);
-        }
-
-        return $query->cursor()
+        return $users->cursor()
             ->map(function (User $user) {
             return new UserSearchDto($user);
         });
