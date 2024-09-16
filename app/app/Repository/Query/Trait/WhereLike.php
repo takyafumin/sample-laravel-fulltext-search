@@ -9,7 +9,7 @@ trait WhereLike
         string $column,
         string $value
     ): \Illuminate\Database\Eloquent\Builder {
-        $escapedValue = str_replace("%", "\%", $value);
+        $escapedValue = addcslashes($value, '%_\\');
         return $query
             ->where($column, 'like', "%{$escapedValue}%");
     }
